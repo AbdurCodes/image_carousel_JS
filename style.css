@@ -5,11 +5,12 @@
 }
 
 html {
-    background-color: aquamarine;
+    background-color: rgb(118, 145, 133);
 }
 
+
 .container {
-    border: 2px solid red;
+    /* border: 2px solid red; */
     height: 100vh;
 
     & .image {
@@ -18,26 +19,5 @@ html {
         justify-content: center;
         align-items: center;
         gap: 7px;
-
-        /* & img {
-            &::before {
-                content: "";
-                display: block;
-                width: 50px;
-                height: 50px;
-                background: url('assets/back-button.png') no-repeat center center;
-                background-size: contain;
-                
-            }
-    
-            &::after {
-                content: "";
-                display: block;
-                width: 50px;
-                height: 50px;
-                background: url('assets/forward-button.png') no-repeat center center;
-                background-size: contain;
-            }
-        } */
     }
 }
