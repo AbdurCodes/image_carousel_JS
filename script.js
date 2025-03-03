@@ -14,7 +14,6 @@ let currentIndex = 0;
 let lowestIndex = 0;
 let highestIndex = images.length - 1;
 
-
 left_arrow.addEventListener('click', () => {
     if (currentIndex == 0) {
         slideshow_image.src = images[currentIndex];
@@ -45,3 +44,12 @@ right_arrow.addEventListener('click', () => {
         alert("This is the end of the slideshow.");
     }
 })
+
+// pic changes in slideshow every 2 secs
+setInterval(()=>{
+    if (currentIndex > highestIndex) {
+        currentIndex = 0; // Reset to the first image when the end of the array is reached
+    }
+    slideshow_image.src = images[currentIndex];
+    currentIndex++;
+}, 2000);
