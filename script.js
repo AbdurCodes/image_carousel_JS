@@ -17,12 +17,40 @@ let lowestIndex = 0;
 let highestIndex = images.length - 1;
 let leftArrowClicked = false;
 let rightArrowClicked = false;
-// let leftArrowClickedAtHighestIndex = false;
-// let rightArrowClickedAtLowestIndex = false;
+let circle_clicked = false;
+
+
+function decideCircle() {
+    navigation_circles.innerHTML = "";
+
+    for (let i = 0; i < images.length; i++) {
+        const circle_empty = document.createElement('img');
+        circle_empty.src = 'assets/circle_empty.png';
+        const circle_filled = document.createElement('img');
+        circle_filled.src = 'assets/circle_filled.png';
+
+        if (i != currentIndex) {
+
+            navigation_circles.appendChild(circle_empty);
+            circle_empty.addEventListener('click', () => {
+                circle_clicked = true;
+                slideshow_image.src = images[i];
+                currentIndex = i;
+                decideCircle();
+            })
+        }
+
+        else {
+            navigation_circles.appendChild(circle_filled);
+        }
+    }
+}
+
 
 left_arrow.addEventListener('click', () => {
     leftArrowClicked = true;
-    // console.log(Boolean(intervalId));
+    // console.log(`left-arrow clicked`);
+
     if (rightArrowClicked) {
         if (currentIndex === lowestIndex) {
             currentIndex = highestIndex - 1;
@@ -37,30 +65,36 @@ left_arrow.addEventListener('click', () => {
     }
 
     if (intervalId) {
-        if (currentIndex >= 2) {
+        if (currentIndex === 1) {
+            currentIndex = highestIndex;
+        }
+        else if (currentIndex >= 2) {
             currentIndex -= 2;
         }
-        // leftArrowClicked = false;
         clearInterval(intervalId);
         intervalId = false;
     }
+    else {
+        if (circle_clicked) {
+            if (currentIndex > lowestIndex) {
+                currentIndex--;
+            }
+            else if (currentIndex === lowestIndex){
+                currentIndex = highestIndex;
+            }
+            circle_clicked = false;
+        }
+    }
+
     decideCircle();
-    console.log(`left-arrow clicked`);
-    console.log(currentIndex);
+    
     if (currentIndex == lowestIndex) {
-        console.log(currentIndex);
         slideshow_image.src = images[currentIndex];
         currentIndex = highestIndex;
-        console.log(currentIndex);
-
-        // console.log(`left-arrow currentIndex: ${currentIndex}`);
-        // alert("This is the end of the slideshow.");
     }
     else if (currentIndex > lowestIndex) {
-        console.log(currentIndex);
         slideshow_image.src = images[currentIndex];
         currentIndex--;
-        // console.log(`left-arrow currentIndex: ${currentIndex}`);
     }
 })
 
@@ -71,47 +105,49 @@ right_arrow.addEventListener('click', () => {
         if (currentIndex <= highestIndex - 2) {
             currentIndex += 2;
         }
+        else if (currentIndex === 3) {
+            currentIndex = lowestIndex;
+        }
         else if (currentIndex === highestIndex) {
             currentIndex = lowestIndex + 1;
         }
         leftArrowClicked = false;
     }
-    // console.log(Boolean(intervalId));
+
     if (intervalId) {
-        // if (currentIndex >= 2) {
-        //     currentIndex += 2;
-        // }
+        if (currentIndex > highestIndex) {
+            currentIndex = 0;
+        }
         clearInterval(intervalId);
         intervalId = false;
     }
+    else {
+        if (circle_clicked) {
+            if (currentIndex < highestIndex) {
+                currentIndex++;
+            }
+            else if (currentIndex === highestIndex){
+                currentIndex = lowestIndex;
+            }
+            circle_clicked = false;
+        }
+    }
+    
     decideCircle();
-    console.log(`right-arrow clicked`);
-    console.log(currentIndex);
     if (currentIndex == lowestIndex) {
-        console.log(currentIndex);
         slideshow_image.src = images[currentIndex];
         currentIndex++;
-        console.log(currentIndex);
-        // console.log(`right-arrow currentIndex: ${currentIndex}`);
     }
     else if (currentIndex < highestIndex) {
-        console.log(currentIndex);
         slideshow_image.src = images[currentIndex];
         currentIndex++;
-        console.log(currentIndex);
-        // console.log(`right-arrow currentIndex: ${currentIndex}`);
     }
     else if (currentIndex == highestIndex) {
-
         slideshow_image.src = images[currentIndex];
-        console.log(currentIndex);
-        // console.log(`right-arrow currentIndex: ${currentIndex}`);
-        // alert("This is the end of the slideshow.");
         currentIndex = lowestIndex;
-        console.log(currentIndex);
     }
-
 })
+
 
 // pic changes in slideshow every 2 secs
 intervalId = setInterval(() => {
@@ -122,64 +158,4 @@ intervalId = setInterval(() => {
     slideshow_image.src = images[currentIndex];
     decideCircle();
     currentIndex++;
-}, 2000);
-
-
-
-function decideCircle() {
-    navigation_circles.innerHTML = "";
-
-    for (let i = 0; i < images.length; i++) {
-        const circle_empty = document.createElement('img');
-        circle_empty.src = 'assets/circle_empty.png';
-        const circle_filled = document.createElement('img');
-        circle_filled.src = 'assets/circle_filled.png';
-
-        if (i != currentIndex) {
-            navigation_circles.appendChild(circle_empty);
-            circle_empty.addEventListener('click', () => {
-                slideshow_image.src = images[i];
-                navigation_circles.innerHTML = "";
-                for (let j = 0; j < images.length; j++) {
-                    const circle_empty = document.createElement('img');
-                    circle_empty.src = 'assets/circle_empty.png';
-                    const circle_filled = document.createElement('img');
-                    circle_filled.src = 'assets/circle_filled.png';
-                    if (j == i) {
-                        navigation_circles.appendChild(circle_filled);
-                        currentIndex = j;
-                    }
-                    else {
-                        navigation_circles.appendChild(circle_empty);
-                    }
-                }
-                // clearInterval(intervalId);
-
-            })
-        }
-
-        else {
-            navigation_circles.appendChild(circle_filled);
-            circle_filled.addEventListener('click', () => {
-                slideshow_image.src = images[i];
-                navigation_circles.innerHTML = "";
-                for (let j = 0; j < images.length; j++) {
-                    const circle_empty = document.createElement('img');
-                    circle_empty.src = 'assets/circle_empty.png';
-                    const circle_filled = document.createElement('img');
-                    circle_filled.src = 'assets/circle_filled.png';
-                    if (j == i) {
-                        navigation_circles.appendChild(circle_filled);
-                        currentIndex = j;
-                    }
-                    else {
-                        navigation_circles.appendChild(circle_empty);
-                    }
-                }
-                // clearInterval(intervalId);
-            })
-        }
-    }
-}
-
-decideCircle();
+}, 1000);
